@@ -24,7 +24,7 @@ public class Dish : Entity<DishId>, IAggregateRoot
     }
 
     public string Name { get; private set; } = string.Empty;
-    private List<DishIngredient> _dishIngredients = [];
+    private readonly List<DishIngredient> _dishIngredients = [];
     public IReadOnlyList<DishIngredient> DishIngredients => _dishIngredients.AsReadOnly();
     public Deleted Deleted { get; private set; } = new();
     public RowVersion RowVersion { get; private set; } = new(0);
