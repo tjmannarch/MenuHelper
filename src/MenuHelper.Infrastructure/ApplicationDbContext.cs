@@ -1,4 +1,6 @@
 using MediatR;
+using MenuHelper.Domain.AggregatesModel.DishAggregate;
+using MenuHelper.Domain.AggregatesModel.IngredientAggregate;
 using Microsoft.EntityFrameworkCore;
 using NetCorePal.Extensions.DistributedTransactions.CAP.Persistence;
 
@@ -8,6 +10,10 @@ public partial class ApplicationDbContext(DbContextOptions<ApplicationDbContext>
     : AppDbContextBase(options, mediator)
     , IMySqlCapDataStorage
 {
+    public DbSet<Ingredient> Ingredients => Set<Ingredient>();
+    public DbSet<Dish> Dishes => Set<Dish>();
+    public DbSet<DishIngredient> DishIngredients => Set<DishIngredient>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         if (modelBuilder is null)
