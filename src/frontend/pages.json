@@ -1,0 +1,47 @@
+{
+	"pages": [
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "菜单助手"
+			}
+		},
+		{
+			"path": "pages/ingredients/index",
+			"style": {
+				"navigationBarTitleText": "原材料管理"
+			}
+		},
+		{
+			"path": "pages/ingredients/edit",
+			"style": {
+				"navigationBarTitleText": "原材料"
+			}
+		},
+		{
+			"path": "pages/dishes/index",
+			"style": {
+				"navigationBarTitleText": "菜品管理"
+			}
+		},
+		{
+			"path": "pages/dishes/edit",
+			"style": {
+				"navigationBarTitleText": "菜品"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			"^wd-(.*)": "wot-design-uni/components/wd-$1/wd-$1.vue"
+		}
+	},
+	"uniIdRouter": {}
+}

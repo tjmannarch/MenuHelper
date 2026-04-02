@@ -1,0 +1,8 @@
+{
+	"dependencies": {
+		"wot-design-uni": "^1.14.0"
+	},
+	"devDependencies": {
+		"sass": "1.78.0"
+	}
+}

@@ -396,3 +396,6 @@ FodyWeavers.xsd
 src/frontend/internal/**/dist/
 src/frontend/packages/**/dist/
 src/frontend/scripts/**/dist/
+
+# Design-time DB context factory (contains local connection string)
+src/MenuHelper.Infrastructure/DesignTimeApplicationDbContextFactory.cs

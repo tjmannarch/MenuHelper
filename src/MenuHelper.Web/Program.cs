@@ -22,7 +22,8 @@ using NetCorePal.Extensions.CodeAnalysis;
 
 Log.Logger = new LoggerConfiguration()
     .Enrich.WithClientIp()
-    .WriteTo.Console(new JsonFormatter())
+    //.WriteTo.Console(new JsonFormatter())
+    .WriteTo.Console()
     .CreateLogger();
 try
 {
@@ -179,6 +180,24 @@ try
     #endregion
 
 
+    #region CORS
+
+    builder.Services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(policy =>
+        {
+            policy.WithOrigins(
+                    "http://localhost:5173",  // Vite dev server (H5)
+                    "http://localhost:8080"   // HBuilderX dev server
+                )
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+        });
+    });
+
+    #endregion
+
     var app = builder.Build();
 
     // 在非生产环境中执行数据库迁移（包括开发、测试、Staging等环境）
@@ -201,7 +220,8 @@ try
     app.UseStaticFiles();
     //app.UseHttpsRedirection();
     app.UseRouting();
-    app.UseAuthentication(); // Authentication 必须在 Authorization 之前
+    app.UseCors(); // CORS 必须在 UseRouting 之后、UseAuthorization 之前
+    app.UseAuthentication();// Authentication 必须在 Authorization 之前
     app.UseAuthorization();
 
     app.MapControllers();
