@@ -6,11 +6,12 @@ const BASE_URL = 'http://localhost:5511'
  */
 function request(method, url, data = {}) {
   return new Promise((resolve, reject) => {
+    const isGet = method === 'GET'
     uni.request({
       url: BASE_URL + url,
       method,
-      data,
-      header: { 'Content-Type': 'application/json' },
+      data: isGet ? undefined : data,
+      header: isGet ? {} : { 'Content-Type': 'application/json' },
       success(res) {
         const body = res.data
         if (res.statusCode >= 200 && res.statusCode < 300) {

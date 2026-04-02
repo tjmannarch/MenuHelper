@@ -179,20 +179,19 @@ try
 
     #endregion
 
-
     #region CORS
+
+    var allowedOrigins = builder.Configuration
+        .GetSection("Cors:AllowedOrigins")
+        .Get<string[]>() ?? [];
 
     builder.Services.AddCors(options =>
     {
         options.AddDefaultPolicy(policy =>
         {
-            policy.WithOrigins(
-                    "http://localhost:5173",  // Vite dev server (H5)
-                    "http://localhost:8080"   // HBuilderX dev server
-                )
+            policy.WithOrigins(allowedOrigins)
                 .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials();
+                .AllowAnyMethod();
         });
     });
 
