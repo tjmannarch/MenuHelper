@@ -1,6 +1,7 @@
 using MediatR;
 using MenuHelper.Domain.AggregatesModel.DishAggregate;
 using MenuHelper.Domain.AggregatesModel.IngredientAggregate;
+using MenuHelper.Domain.AggregatesModel.InventoryCheckAggregate;
 using Microsoft.EntityFrameworkCore;
 using NetCorePal.Extensions.DistributedTransactions.CAP.Persistence;
 
@@ -13,6 +14,7 @@ public partial class ApplicationDbContext(DbContextOptions<ApplicationDbContext>
     public DbSet<Ingredient> Ingredients => Set<Ingredient>();
     public DbSet<Dish> Dishes => Set<Dish>();
     public DbSet<DishIngredient> DishIngredients => Set<DishIngredient>();
+    public DbSet<InventoryCheck> InventoryChecks => Set<InventoryCheck>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
