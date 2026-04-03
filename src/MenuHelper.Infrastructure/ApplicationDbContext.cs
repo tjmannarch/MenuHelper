@@ -15,7 +15,6 @@ public partial class ApplicationDbContext(DbContextOptions<ApplicationDbContext>
     public DbSet<Dish> Dishes => Set<Dish>();
     public DbSet<DishIngredient> DishIngredients => Set<DishIngredient>();
     public DbSet<InventoryCheck> InventoryChecks => Set<InventoryCheck>();
-    public DbSet<InventoryCheckItem> InventoryCheckItems => Set<InventoryCheckItem>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
