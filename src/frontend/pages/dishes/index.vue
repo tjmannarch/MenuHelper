@@ -41,6 +41,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { onShow } from '@dcloudio/uni-app'
 import { useToast } from 'wot-design-uni'
 import { api } from '@/utils/api.js'
 
@@ -82,7 +83,9 @@ function onRefresh() { refreshing.value = true; loadList(true) }
 function onClear() { keyword.value = ''; loadList(true) }
 function goEdit(id) { uni.navigateTo({ url: `/pages/dishes/edit?id=${id || ''}` }) }
 
-onMounted(() => loadList())
+onMounted(() => {})
+
+onShow(() => loadList())
 </script>
 
 <style lang="scss">

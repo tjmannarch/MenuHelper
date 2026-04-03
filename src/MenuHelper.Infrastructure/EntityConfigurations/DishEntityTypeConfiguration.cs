@@ -25,6 +25,7 @@ public class DishEntityTypeConfiguration : IEntityTypeConfiguration<Dish>
         builder.HasMany(x => x.DishIngredients)
             .WithOne()
             .HasForeignKey("DishId")
+            .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasIndex(x => x.Deleted);

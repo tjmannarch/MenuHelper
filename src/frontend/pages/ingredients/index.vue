@@ -10,34 +10,27 @@
 		<!-- 分类 Tab -->
 		<wd-tabs v-model="activeTab" @change="onTabChange">
 			<wd-tab title="全部" :name="0" />
-			<wd-tab title="凉皮类" :name="1" />
-			<wd-tab title="肉夹馍类" :name="2" />
-			<wd-tab title="石锅饭类" :name="3" />
-			<wd-tab title="通用食材" :name="4" />
+			<wd-tab v-for="cat in categories" :key="cat.value" :title="cat.label" :name="cat.value" />
 		</wd-tabs>
 
 		<!-- 列表 -->
-		<scroll-view scroll-y class="list-wrap" @scrolltolower="loadMore" refresher-enabled @refresherrefresh="onRefresh" :refresher-triggered="refreshing">
+		<scroll-view scroll-y class="list-wrap" @scrolltolower="loadMore" refresher-enabled
+			@refresherrefresh="onRefresh" :refresher-triggered="refreshing">
 			<view v-if="list.length === 0 && !loading" class="empty">
 				<wd-status-tip image="search" tip="暂无原材料，点击右下角添加" />
 			</view>
 
 			<wd-cell-group v-else>
-				<wd-cell
-					v-for="item in list"
-					:key="item.id"
-					:title="item.name"
-					is-link
-					@click="goEdit(item.id)"
-				>
+				<wd-cell v-for="item in list" :key="item.id" :title="item.name"
+					:value="item.defaultUnitPrice != null ? `¥${item.defaultUnitPrice}/${item.unit}` : ''" is-link
+					@click="goEdit(item.id)">
 					<template #label>
 						<view class="cell-label">
-							<wd-tag size="small" :type="categoryTagType(item.category)">{{ categoryLabel(item.category) }}</wd-tag>
-							<wd-tag size="small" plain custom-class="ml-8">{{ consumptionLabel(item.consumptionType) }}</wd-tag>
+							<wd-tag size="small" :type="categoryTagType(item.category)">{{ categoryLabel(item.category)
+							}}</wd-tag>
+							<wd-tag size="small" type="default" plain>{{ consumptionLabel(item.consumptionType)
+							}}</wd-tag>
 						</view>
-					</template>
-					<template #value>
-						<text class="price">¥{{ item.defaultUnitPrice }}/{{ item.unit }}</text>
 					</template>
 				</wd-cell>
 			</wd-cell-group>
@@ -58,6 +51,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { onShow } from '@dcloudio/uni-app'
 import { useToast } from 'wot-design-uni'
 import { api } from '@/utils/api.js'
 
@@ -72,67 +66,85 @@ const pageIndex = ref(1)
 const noMore = ref(false)
 const PAGE_SIZE = 20
 
-const CATEGORY_MAP = { 1: '凉皮类', 2: '肉夹馍类', 3: '石锅饭类', 4: '通用食材' }
-const CATEGORY_TAG  = { 1: 'primary', 2: 'warning', 3: 'success', 4: '' }
-const CONSUMPTION_MAP = { 1: '即时消耗', 2: '摊销消耗' }
+// 从接口动态加载的枚举数据
+const categories = ref([])
+const consumptionTypes = ref([])
 
-const categoryLabel = (v) => CATEGORY_MAP[v] || '-'
+async function loadMeta() {
+	try {
+		const res = await api.get('/api/meta/ingredients')
+		categories.value = res.categories ?? []
+		consumptionTypes.value = res.consumptionTypes ?? []
+	} catch (e) { /* 降级使用空列表 */ }
+}
+
+const CATEGORY_TAG = { 1: 'primary', 2: 'warning', 3: 'success', 4: 'default' }
+
+const categoryLabel = (v) => categories.value.find(c => c.value === v)?.label ?? v
 const categoryTagType = (v) => CATEGORY_TAG[v] || ''
-const consumptionLabel = (v) => CONSUMPTION_MAP[v] || '-'
+const consumptionLabel = (v) => consumptionTypes.value.find(c => c.value === v)?.label ?? v
 
 async function loadList(reset = true) {
-  if (reset) { pageIndex.value = 1; noMore.value = false }
-  if (noMore.value || loading.value) return
-  loading.value = true
-  try {
-    const params = {
-      keyword: keyword.value || undefined,
-      category: activeTab.value > 0 ? activeTab.value : undefined,
-      pageIndex: pageIndex.value,
-      pageSize: PAGE_SIZE
-    }
-    const res = await api.get('/api/ingredients', params)
-    const items = res.items ?? []
-    if (reset) {
-      list.value = items
-    } else {
-      list.value.push(...items)
-    }
-    if (items.length < PAGE_SIZE) noMore.value = true
-  } catch (e) {
-    toast.error(e.message)
-  } finally {
-    loading.value = false
-    refreshing.value = false
-  }
+	if (reset) { pageIndex.value = 1; noMore.value = false }
+	if (noMore.value || loading.value) return
+	loading.value = true
+	try {
+		const params = {
+			keyword: keyword.value || undefined,
+			category: activeTab.value > 0 ? activeTab.value : undefined,
+			pageIndex: pageIndex.value,
+			pageSize: PAGE_SIZE
+		}
+		const res = await api.get('/api/ingredients', params)
+		const items = res.items ?? []
+		if (reset) {
+			list.value = items
+		} else {
+			list.value.push(...items)
+		}
+		if (items.length < PAGE_SIZE) noMore.value = true
+	} catch (e) {
+		toast.error(e.message)
+	} finally {
+		loading.value = false
+		refreshing.value = false
+	}
 }
 
 function loadMore() {
-  if (!noMore.value && !loading.value) {
-    pageIndex.value++
-    loadList(false)
-  }
+	if (!noMore.value && !loading.value) {
+		pageIndex.value++
+		loadList(false)
+	}
 }
 
 function onRefresh() {
-  refreshing.value = true
-  loadList(true)
+	refreshing.value = true
+	loadList(true)
 }
 
-function onTabChange() {
-  loadList(true)
+function onTabChange({ name }) {
+	activeTab.value = name
+	loadList(true)
 }
 
 function onClear() {
-  keyword.value = ''
-  loadList(true)
+	keyword.value = ''
+	loadList(true)
 }
 
 function goEdit(id) {
-  uni.navigateTo({ url: `/pages/ingredients/edit?id=${id || ''}` })
+	uni.navigateTo({ url: `/pages/ingredients/edit?id=${id || ''}` })
 }
 
-onMounted(() => loadList())
+onMounted(() => {
+	loadMeta()
+})
+
+// 每次从编辑页返回时刷新列表
+onShow(() => {
+	loadList()
+})
 </script>
 
 <style lang="scss">
@@ -161,13 +173,9 @@ onMounted(() => loadList())
 	gap: 8rpx;
 }
 
-:deep(.ml-8) {
-	margin-left: 8rpx;
-}
-
-.price {
-	font-size: 26rpx;
+:deep(.wd-cell__value) {
 	color: #f5a623;
+	font-size: 26rpx;
 }
 
 .empty {
@@ -181,7 +189,10 @@ onMounted(() => loadList())
 	padding: 24rpx;
 	gap: 12rpx;
 
-	.loading-text { font-size: 24rpx; color: #999; }
+	.loading-text {
+		font-size: 24rpx;
+		color: #999;
+	}
 }
 
 .no-more {

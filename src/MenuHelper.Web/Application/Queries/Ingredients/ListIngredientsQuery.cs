@@ -49,4 +49,4 @@ public record IngredientListItemDto(
     ConsumptionType ConsumptionType,
     SupplierId? SupplierId,
     decimal? SafetyStockLevel,
-    decimal DefaultUnitPrice);
+    decimal? DefaultUnitPrice);

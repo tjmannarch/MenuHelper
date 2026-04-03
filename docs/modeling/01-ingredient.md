@@ -25,7 +25,7 @@
 | Name | string | 原材料名称 |
 | Unit | string | 计量单位（斤/个/包等） |
 | Category | IngredientCategory（枚举） | 凉皮类/肉夹馍类/石锅饭类/通用食材 |
-| ConsumptionType | ConsumptionType（枚举） | 即时消耗/摊销消耗 |
+| ConsumptionType | ConsumptionType（枚举） | 按库存盘点/按周期摊销/按销量推算 |
 | SupplierId | SupplierId?（可空） | null = 自购 |
 | SafetyStockLevel | decimal? | 安全库存线 |
 | RestockCycleDays | int? | 默认备货周期（天） |

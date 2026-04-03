@@ -29,6 +29,12 @@
 			"style": {
 				"navigationBarTitleText": "菜品"
 			}
+		},
+		{
+			"path": "pages/more/index",
+			"style": {
+				"navigationBarTitleText": "更多功能"
+			}
 		}
 	],
 	"globalStyle": {

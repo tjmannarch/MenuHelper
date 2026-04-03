@@ -27,7 +27,7 @@ public class AddDishIngredientCommandHandler(IDishRepository dishRepository, IIn
 {
     public async Task Handle(AddDishIngredientCommand request, CancellationToken cancellationToken)
     {
-        var dish = await dishRepository.GetAsync(request.DishId, cancellationToken)
+        var dish = await dishRepository.GetWithIngredientsAsync(request.DishId, cancellationToken)
             ?? throw new KnownException($"未找到菜品，DishId = {request.DishId}");
 
         _ = await ingredientRepository.GetAsync(request.IngredientId, cancellationToken)

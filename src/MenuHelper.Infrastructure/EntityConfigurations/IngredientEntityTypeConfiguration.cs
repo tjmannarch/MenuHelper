@@ -29,7 +29,7 @@ public class IngredientEntityTypeConfiguration : IEntityTypeConfiguration<Ingred
 
         builder.Property(x => x.ConsumptionType)
             .IsRequired()
-            .HasComment("消耗方式：1=即时消耗 2=摊销消耗");
+            .HasComment("消耗方式：1=按库存盘点 2=按周期摊销 3=按销量推算");
 
         builder.Property(x => x.SupplierId)
             .HasComment("供应商标识，null表示自购");
@@ -44,9 +44,8 @@ public class IngredientEntityTypeConfiguration : IEntityTypeConfiguration<Ingred
             .HasComment("最长存放天数");
 
         builder.Property(x => x.DefaultUnitPrice)
-            .IsRequired()
             .HasPrecision(18, 4)
-            .HasComment("默认单价（预设基准值）");
+            .HasComment("默认单价（预设基准值，选填）");
 
         builder.Property(x => x.Deleted)
             .IsRequired()

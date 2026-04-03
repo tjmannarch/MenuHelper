@@ -77,12 +77,9 @@
 		<view class="section-title">功能模块</view>
 		<wd-grid :column="4" clickable border>
 			<wd-grid-item icon="app" text="原材料" @click="go('ingredients')" />
-			<wd-grid-item icon="view-list" text="菜品" @click="go('dishes')" />
 			<wd-grid-item icon="user" text="供应商" @click="go('suppliers')" />
 			<wd-grid-item icon="cart" text="采购记录" @click="go('purchases')" />
-			<wd-grid-item icon="chart" text="财务统计" @click="go('finance')" />
 			<wd-grid-item icon="history" text="盘点记录" @click="go('inventory-logs')" />
-			<wd-grid-item icon="setting1" text="菜品配置" @click="go('dish-config')" />
 			<wd-grid-item icon="more1" text="更多" @click="go('more')" />
 		</wd-grid>
 	</view>
@@ -116,13 +113,10 @@ const profitClass = computed(() => {
 // 跳转方法
 const ROUTES = {
   ingredients: '/pages/ingredients/index',
-  dishes: '/pages/dishes/index',
   suppliers: '',
   purchases: '',
-  finance: '',
   'inventory-logs': '',
-  'dish-config': '/pages/dishes/index',
-  more: ''
+  more: '/pages/more/index'
 }
 
 const openTodayMenu = () => uni.showToast({ title: '功能开发中', icon: 'none' })

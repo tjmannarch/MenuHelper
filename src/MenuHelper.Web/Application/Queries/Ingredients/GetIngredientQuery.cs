@@ -41,4 +41,4 @@ public record IngredientDetailDto(
     decimal? SafetyStockLevel,
     int? RestockCycleDays,
     int? MaxShelfDays,
-    decimal DefaultUnitPrice);
+    decimal? DefaultUnitPrice);

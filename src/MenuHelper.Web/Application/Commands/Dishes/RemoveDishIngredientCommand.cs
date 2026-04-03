@@ -4,14 +4,14 @@ using MenuHelper.Infrastructure.Repositories;
 
 namespace MenuHelper.Web.Application.Commands.Dishes;
 
-public record RemoveDishIngredientCommand(DishId DishId, IngredientId IngredientId) : ICommand;
+public record RemoveDishIngredientCommand(DishId DishId, DishIngredientId DishIngredientId) : ICommand;
 
 public class RemoveDishIngredientCommandValidator : AbstractValidator<RemoveDishIngredientCommand>
 {
     public RemoveDishIngredientCommandValidator()
     {
         RuleFor(x => x.DishId).NotEmpty();
-        RuleFor(x => x.IngredientId).NotEmpty();
+        RuleFor(x => x.DishIngredientId).NotEmpty();
     }
 }
 
@@ -20,8 +20,8 @@ public class RemoveDishIngredientCommandHandler(IDishRepository dishRepository)
 {
     public async Task Handle(RemoveDishIngredientCommand request, CancellationToken cancellationToken)
     {
-        var dish = await dishRepository.GetAsync(request.DishId, cancellationToken)
+        var dish = await dishRepository.GetWithIngredientsAsync(request.DishId, cancellationToken)
             ?? throw new KnownException($"未找到菜品，DishId = {request.DishId}");
-        dish.RemoveIngredient(request.IngredientId);
+        dish.RemoveIngredient(request.DishIngredientId);
     }
 }

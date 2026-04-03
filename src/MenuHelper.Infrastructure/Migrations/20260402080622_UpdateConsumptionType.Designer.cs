@@ -4,6 +4,7 @@ using MenuHelper.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MenuHelper.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260402080622_UpdateConsumptionType")]
+    partial class UpdateConsumptionType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,7 +58,7 @@ namespace MenuHelper.Infrastructure.Migrations
                         .HasColumnType("char(36)")
                         .HasComment("菜品原材料关联标识");
 
-                    b.Property<Guid>("DishId")
+                    b.Property<Guid?>("DishId")
                         .HasColumnType("char(36)");
 
                     b.Property<decimal?>("FixedQuantity")
@@ -94,10 +97,10 @@ namespace MenuHelper.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasComment("消耗方式：1=按库存盘点 2=按周期摊销 3=按销量推算");
 
-                    b.Property<decimal?>("DefaultUnitPrice")
+                    b.Property<decimal>("DefaultUnitPrice")
                         .HasPrecision(18, 4)
                         .HasColumnType("decimal(18,4)")
-                        .HasComment("默认单价（预设基准值，选填）");
+                        .HasComment("默认单价（预设基准值）");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("tinyint(1)")
@@ -261,8 +264,7 @@ namespace MenuHelper.Infrastructure.Migrations
                     b.HasOne("MenuHelper.Domain.AggregatesModel.DishAggregate.Dish", null)
                         .WithMany("DishIngredients")
                         .HasForeignKey("DishId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("MenuHelper.Domain.AggregatesModel.DishAggregate.Dish", b =>

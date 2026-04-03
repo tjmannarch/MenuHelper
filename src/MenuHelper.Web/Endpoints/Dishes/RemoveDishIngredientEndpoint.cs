@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace MenuHelper.Web.Endpoints.Dishes;
 
 [Tags("Dishes")]
-[HttpDelete("/api/dishes/{id}/ingredients/{ingredientId}")]
+[HttpDelete("/api/dishes/{id}/ingredients/{dishIngredientId}")]
 [AllowAnonymous]
 public class RemoveDishIngredientEndpoint(IMediator mediator)
     : EndpointWithoutRequest
@@ -15,8 +15,8 @@ public class RemoveDishIngredientEndpoint(IMediator mediator)
     public override async Task HandleAsync(CancellationToken ct)
     {
         var dishId = new DishId(Route<Guid>("id"));
-        var ingredientId = new IngredientId(Route<Guid>("ingredientId"));
-        await mediator.Send(new RemoveDishIngredientCommand(dishId, ingredientId), ct);
+        var dishIngredientId = new DishIngredientId(Route<Guid>("dishIngredientId"));
+        await mediator.Send(new RemoveDishIngredientCommand(dishId, dishIngredientId), ct);
         await Send.NoContentAsync(ct);
     }
 }

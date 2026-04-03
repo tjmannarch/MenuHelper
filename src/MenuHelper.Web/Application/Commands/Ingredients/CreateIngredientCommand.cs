@@ -9,7 +9,7 @@ public record CreateIngredientCommand(
     string Unit,
     IngredientCategory Category,
     ConsumptionType ConsumptionType,
-    decimal DefaultUnitPrice,
+    decimal? DefaultUnitPrice = null,
     SupplierId? SupplierId = null,
     decimal? SafetyStockLevel = null,
     int? RestockCycleDays = null,
@@ -21,7 +21,7 @@ public class CreateIngredientCommandValidator : AbstractValidator<CreateIngredie
     {
         RuleFor(x => x.Name).NotEmpty().WithMessage("原材料名称不能为空").MaximumLength(100);
         RuleFor(x => x.Unit).NotEmpty().WithMessage("计量单位不能为空").MaximumLength(20);
-        RuleFor(x => x.DefaultUnitPrice).GreaterThanOrEqualTo(0).WithMessage("默认单价不能小于0");
+        RuleFor(x => x.DefaultUnitPrice).GreaterThanOrEqualTo(0).When(x => x.DefaultUnitPrice.HasValue).WithMessage("默认单价不能小于0");
         RuleFor(x => x.SafetyStockLevel).GreaterThanOrEqualTo(0).When(x => x.SafetyStockLevel.HasValue).WithMessage("安全库存线不能小于0");
         RuleFor(x => x.RestockCycleDays).GreaterThanOrEqualTo(1).When(x => x.RestockCycleDays.HasValue).WithMessage("备货周期不能小于1天");
         RuleFor(x => x.MaxShelfDays).GreaterThanOrEqualTo(1).When(x => x.MaxShelfDays.HasValue).WithMessage("最长存放天数不能小于1天");

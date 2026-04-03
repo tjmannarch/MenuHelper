@@ -78,12 +78,12 @@ public class Dish : Entity<DishId>, IAggregateRoot
     /// <summary>
     /// 移除原材料关联
     /// </summary>
-    public void RemoveIngredient(IngredientId ingredientId)
+    public void RemoveIngredient(DishIngredientId dishIngredientId)
     {
-        var item = _dishIngredients.FirstOrDefault(x => x.IngredientId == ingredientId)
+        var item = _dishIngredients.FirstOrDefault(x => x.Id == dishIngredientId)
             ?? throw new KnownException("该原材料未关联到此菜品");
         _dishIngredients.Remove(item);
-        this.AddDomainEvent(new DishIngredientRemovedDomainEvent(this, ingredientId));
+        this.AddDomainEvent(new DishIngredientRemovedDomainEvent(this, dishIngredientId));
     }
 
     /// <summary>

@@ -4,6 +4,7 @@ using MenuHelper.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MenuHelper.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260402083039_MakeDefaultUnitPriceNullable")]
+    partial class MakeDefaultUnitPriceNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,7 +58,7 @@ namespace MenuHelper.Infrastructure.Migrations
                         .HasColumnType("char(36)")
                         .HasComment("菜品原材料关联标识");
 
-                    b.Property<Guid>("DishId")
+                    b.Property<Guid?>("DishId")
                         .HasColumnType("char(36)");
 
                     b.Property<decimal?>("FixedQuantity")
@@ -261,8 +264,7 @@ namespace MenuHelper.Infrastructure.Migrations
                     b.HasOne("MenuHelper.Domain.AggregatesModel.DishAggregate.Dish", null)
                         .WithMany("DishIngredients")
                         .HasForeignKey("DishId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("MenuHelper.Domain.AggregatesModel.DishAggregate.Dish", b =>

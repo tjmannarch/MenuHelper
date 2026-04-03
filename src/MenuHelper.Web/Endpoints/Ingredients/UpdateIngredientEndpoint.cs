@@ -10,7 +10,7 @@ public record UpdateIngredientRequest(
     string Unit,
     IngredientCategory Category,
     ConsumptionType ConsumptionType,
-    decimal DefaultUnitPrice,
+    decimal? DefaultUnitPrice,
     decimal? SafetyStockLevel = null,
     int? RestockCycleDays = null,
     int? MaxShelfDays = null);
