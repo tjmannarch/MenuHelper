@@ -6,19 +6,20 @@ namespace MenuHelper.Domain.Tests;
 
 public class InventoryCheckTests
 {
+    private static readonly DateOnly SampleDate = new(2026, 4, 1);
+
     [Fact]
     public void Constructor_WithValidData_ShouldCreateInventoryCheck()
     {
         // Arrange
-        var checkDate = new DateOnly(2026, 4, 1);
         var ingredientId = new IngredientId(Guid.NewGuid());
         var items = new[] { (ingredientId, 10.5m) };
 
         // Act
-        var inventoryCheck = new InventoryCheck(checkDate, items);
+        var inventoryCheck = new InventoryCheck(SampleDate, items);
 
         // Assert
-        Assert.Equal(checkDate, inventoryCheck.CheckDate);
+        Assert.Equal(SampleDate, inventoryCheck.CheckDate);
         Assert.Single(inventoryCheck.Items);
         Assert.Equal(ingredientId, inventoryCheck.Items[0].IngredientId);
         Assert.Equal(10.5m, inventoryCheck.Items[0].Quantity);
@@ -29,11 +30,10 @@ public class InventoryCheckTests
     public void Constructor_ShouldPublishInventoryCheckCreatedDomainEvent()
     {
         // Arrange
-        var checkDate = new DateOnly(2026, 4, 1);
         var items = new[] { (new IngredientId(Guid.NewGuid()), 5m) };
 
         // Act
-        var inventoryCheck = new InventoryCheck(checkDate, items);
+        var inventoryCheck = new InventoryCheck(SampleDate, items);
 
         // Assert
         var domainEvents = inventoryCheck.GetDomainEvents();
@@ -45,14 +45,11 @@ public class InventoryCheckTests
     [Fact]
     public void Constructor_WithEmptyItems_ShouldCreateInventoryCheckWithNoItems()
     {
-        // Arrange
-        var checkDate = new DateOnly(2026, 4, 1);
-
         // Act
-        var inventoryCheck = new InventoryCheck(checkDate, []);
+        var inventoryCheck = new InventoryCheck(SampleDate, []);
 
         // Assert
-        Assert.Equal(checkDate, inventoryCheck.CheckDate);
+        Assert.Equal(SampleDate, inventoryCheck.CheckDate);
         Assert.Empty(inventoryCheck.Items);
     }
 
@@ -60,12 +57,11 @@ public class InventoryCheckTests
     public void Constructor_WithDuplicateIngredientId_ShouldThrowKnownException()
     {
         // Arrange
-        var checkDate = new DateOnly(2026, 4, 1);
         var ingredientId = new IngredientId(Guid.NewGuid());
         var items = new[] { (ingredientId, 5m), (ingredientId, 10m) };
 
         // Act & Assert
-        var ex = Assert.Throws<KnownException>(() => new InventoryCheck(checkDate, items));
+        var ex = Assert.Throws<KnownException>(() => new InventoryCheck(SampleDate, items));
         Assert.Equal("同一盘点中不允许重复录入同一原材料", ex.Message);
     }
 
@@ -75,11 +71,10 @@ public class InventoryCheckTests
     public void Constructor_WithNegativeQuantity_ShouldThrowKnownException(decimal quantity)
     {
         // Arrange
-        var checkDate = new DateOnly(2026, 4, 1);
         var items = new[] { (new IngredientId(Guid.NewGuid()), quantity) };
 
         // Act & Assert
-        var ex = Assert.Throws<KnownException>(() => new InventoryCheck(checkDate, items));
+        var ex = Assert.Throws<KnownException>(() => new InventoryCheck(SampleDate, items));
         Assert.Equal("库存数量不能小于0", ex.Message);
     }
 
@@ -87,12 +82,11 @@ public class InventoryCheckTests
     public void Constructor_WithZeroQuantity_ShouldSucceed()
     {
         // Arrange
-        var checkDate = new DateOnly(2026, 4, 1);
         var ingredientId = new IngredientId(Guid.NewGuid());
         var items = new[] { (ingredientId, 0m) };
 
         // Act
-        var inventoryCheck = new InventoryCheck(checkDate, items);
+        var inventoryCheck = new InventoryCheck(SampleDate, items);
 
         // Assert
         Assert.Single(inventoryCheck.Items);
@@ -103,17 +97,14 @@ public class InventoryCheckTests
     public void SetItems_ShouldReplaceAllExistingItems()
     {
         // Arrange
-        var checkDate = new DateOnly(2026, 4, 1);
         var id1 = new IngredientId(Guid.NewGuid());
         var id2 = new IngredientId(Guid.NewGuid());
         var id3 = new IngredientId(Guid.NewGuid());
-        var inventoryCheck = new InventoryCheck(checkDate, new[] { (id1, 5m), (id2, 10m) });
+        var inventoryCheck = new InventoryCheck(SampleDate, new[] { (id1, 5m), (id2, 10m) });
         inventoryCheck.ClearDomainEvents();
 
-        var newItems = new[] { (id2, 20m), (id3, 15m) };
-
         // Act
-        inventoryCheck.SetItems(newItems);
+        inventoryCheck.SetItems(new[] { (id2, 20m), (id3, 15m) });
 
         // Assert
         Assert.Equal(2, inventoryCheck.Items.Count);
@@ -126,14 +117,11 @@ public class InventoryCheckTests
     public void SetItems_ShouldPublishInventoryCheckItemsUpdatedDomainEvent()
     {
         // Arrange
-        var checkDate = new DateOnly(2026, 4, 1);
-        var inventoryCheck = new InventoryCheck(checkDate, []);
+        var inventoryCheck = new InventoryCheck(SampleDate, []);
         inventoryCheck.ClearDomainEvents();
 
-        var newItems = new[] { (new IngredientId(Guid.NewGuid()), 8m) };
-
         // Act
-        inventoryCheck.SetItems(newItems);
+        inventoryCheck.SetItems(new[] { (new IngredientId(Guid.NewGuid()), 8m) });
 
         // Assert
         var domainEvents = inventoryCheck.GetDomainEvents();
@@ -146,7 +134,7 @@ public class InventoryCheckTests
     public void SetItems_WithDuplicateIngredientId_ShouldThrowKnownException()
     {
         // Arrange
-        var inventoryCheck = new InventoryCheck(new DateOnly(2026, 4, 1), []);
+        var inventoryCheck = new InventoryCheck(SampleDate, []);
         var ingredientId = new IngredientId(Guid.NewGuid());
         var items = new[] { (ingredientId, 5m), (ingredientId, 10m) };
 
@@ -161,7 +149,7 @@ public class InventoryCheckTests
     public void SetItems_WithNegativeQuantity_ShouldThrowKnownException(decimal quantity)
     {
         // Arrange
-        var inventoryCheck = new InventoryCheck(new DateOnly(2026, 4, 1), []);
+        var inventoryCheck = new InventoryCheck(SampleDate, []);
         var items = new[] { (new IngredientId(Guid.NewGuid()), quantity) };
 
         // Act & Assert
@@ -174,7 +162,7 @@ public class InventoryCheckTests
     {
         // Arrange
         var id1 = new IngredientId(Guid.NewGuid());
-        var inventoryCheck = new InventoryCheck(new DateOnly(2026, 4, 1), new[] { (id1, 5m) });
+        var inventoryCheck = new InventoryCheck(SampleDate, new[] { (id1, 5m) });
 
         // Act
         inventoryCheck.SetItems([]);
@@ -189,7 +177,7 @@ public class InventoryCheckTests
         // Arrange
         var id1 = new IngredientId(Guid.NewGuid());
         var id2 = new IngredientId(Guid.NewGuid());
-        var inventoryCheck = new InventoryCheck(new DateOnly(2026, 4, 1), new[] { (id1, 5m) });
+        var inventoryCheck = new InventoryCheck(SampleDate, new[] { (id1, 5m) });
 
         // Act - pass duplicate to trigger error
         Assert.Throws<KnownException>(() => inventoryCheck.SetItems(new[] { (id2, 1m), (id2, 2m) }));
@@ -206,7 +194,7 @@ public class InventoryCheckTests
         var id1 = new IngredientId(Guid.NewGuid());
         var id2 = new IngredientId(Guid.NewGuid());
         var id3 = new IngredientId(Guid.NewGuid());
-        var inventoryCheck = new InventoryCheck(new DateOnly(2026, 4, 1), new[] { (id1, 5m) });
+        var inventoryCheck = new InventoryCheck(SampleDate, new[] { (id1, 5m) });
 
         // Act - simulate multiple modifications on the same day
         inventoryCheck.SetItems(new[] { (id1, 10m), (id2, 20m) });

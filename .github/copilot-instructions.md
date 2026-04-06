@@ -1,8 +1,26 @@
 你的任务是按照 *.instructions.md 描述的规范完成功能开发任务。
 
+## 工作流约定
+
+- **收到"了解项目现状"/"读取检查点"/"分析"等指令时，只做信息摘要，不写任何代码、不创建文件、不创建 todos**，等待明确的开发指令（如"开始开发"/"完成这个任务"）
+- 开始实现前，先列出任务计划，等用户确认后再动手
+- **每次设计决策变更后，无需等用户提醒，主动同步更新以下三处**：
+  1. `analysis/requirements.md`
+  2. `docs/菜单助手-产品需求文档.md`
+  3. `copilot-instructions.md` 的「业务设计决策」节
+
 ## 重要规则
 
 - 优先遵循instructions文档描述的规范
+
+## 项目运行约定
+
+- **Git**：不要执行任何 git 命令，由用户手动提交
+- **数据库迁移**：后端启动时自动调用 `MigrateAsync()`，无需手动执行 `dotnet ef database update`；生成迁移文件后告知用户重启后端即可
+- **后端端口**：`http://localhost:5511`（见 launchSettings.json）
+- **CORS**：从 `appsettings.Development.json` 的 `Cors:AllowedOrigins` 读取，已配置 `localhost:5173`、`localhost:8080`
+- **前端框架**：Wot UI（npm 包名 `wot-design-uni`），easycom 已在 `pages.json` 配置
+- **前端 BASE_URL**：`http://localhost:5511`（见 `src/frontend/utils/api.js`）
 
 ## 最佳实践
 
@@ -71,7 +89,21 @@ MenuHelper.sln
 ### 最佳实践
 （遵循各模块对应的 *.instructions.md 文档；本节不再另行维护“通用最佳实践”文件以避免重复和漂移。）
 
-## 核心开发原则
+## 业务设计决策（已确认）
+
+### 每日库存盘点（REQ-010）
+- **适用食材**：面粉、鸡蛋、白饼、腊汁肉等**可以称重/数数**的食材
+- **不适用**：黄瓜、小葱等蔬菜（店主目测判断够不够，不称重，不强制精确录入数量）
+- ⚠️ **设计约定**：涉及库存盘点的新功能，必须区分这两类食材，**不要为"不适用"的食材设计数量追踪字段**（教训：`StockedOnDate` 字段最终被删除，原因是蔬菜类食材根本不追踪批次）
+
+### 新鲜度预警（REQ-012）
+- **实现方式**：基于账单记录中该食材**最近一次进货日期**计算存放天数，不依赖库存盘点数量推算
+- **优先级**：P2，依赖账单模块（Issue #23）完成后实现
+- **`InventoryCheckItem` 不含 `StockedOnDate` 字段**，新鲜度计算不在盘点聚合内进行
+
+---
+
+
 
 ### 文件组织
 - **聚合根** → `src/MenuHelper.Domain/AggregatesModel/{AggregateFolder}/`

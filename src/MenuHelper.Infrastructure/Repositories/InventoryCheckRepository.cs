@@ -1,3 +1,4 @@
+using MenuHelper.Domain.AggregatesModel.IngredientAggregate;
 using MenuHelper.Domain.AggregatesModel.InventoryCheckAggregate;
 
 namespace MenuHelper.Infrastructure.Repositories;

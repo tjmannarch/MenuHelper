@@ -120,7 +120,7 @@ const ROUTES = {
 }
 
 const openTodayMenu = () => uni.showToast({ title: '功能开发中', icon: 'none' })
-const goInventory = () => uni.showToast({ title: '功能开发中', icon: 'none' })
+const goInventory = () => uni.navigateTo({ url: '/pages/inventory/index' })
 const goAddRevenue = () => uni.showToast({ title: '功能开发中', icon: 'none' })
 const go = (page) => {
   const url = ROUTES[page]

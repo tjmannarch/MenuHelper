@@ -31,6 +31,12 @@
 			}
 		},
 		{
+			"path": "pages/inventory/index",
+			"style": {
+				"navigationBarTitleText": "库存盘点"
+			}
+		},
+		{
 			"path": "pages/more/index",
 			"style": {
 				"navigationBarTitleText": "更多功能"
