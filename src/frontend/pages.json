@@ -41,9 +41,63 @@
 			"style": {
 				"navigationBarTitleText": "更多功能"
 			}
+		},
+		{
+			"path": "pages/suppliers/index",
+			"style": {
+				"navigationBarTitleText": "供应商管理"
+			}
+		},
+		{
+			"path": "pages/suppliers/edit",
+			"style": {
+				"navigationBarTitleText": "供应商"
+			}
+		},
+		{
+			"path": "pages/purchases/index",
+			"style": {
+				"navigationBarTitleText": "进货记录"
+			}
+		},
+		{
+			"path": "pages/purchases/create",
+			"style": {
+				"navigationBarTitleText": "新增进货记录"
+			}
+		},
+		{
+			"path": "pages/purchases/detail",
+			"style": {
+				"navigationBarTitleText": "进货详情"
+			}
+		},
+		{
+			"path": "pages/purchases/balance",
+			"style": {
+				"navigationBarTitleText": "供应商对账"
+			}
+		},
+		{
+			"path": "pages/purchases/order",
+			"style": {
+				"navigationBarTitleText": "生成采购单"
+			}
+		},
+		{
+			"path": "pages/revenue/index",
+			"style": { "navigationBarTitleText": "录入营业额" }
+		},
+		{
+			"path": "pages/finance/index",
+			"style": { "navigationBarTitleText": "财务统计" }
+		},
+		{
+			"path": "pages/freshness/index",
+			"style": { "navigationBarTitleText": "新鲜度预警" }
 		}
 	],
-	"globalStyle": {
+	"globalStyle":{
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",

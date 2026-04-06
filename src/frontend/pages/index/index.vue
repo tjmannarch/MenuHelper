@@ -113,15 +113,15 @@ const profitClass = computed(() => {
 // 跳转方法
 const ROUTES = {
   ingredients: '/pages/ingredients/index',
-  suppliers: '',
-  purchases: '',
-  'inventory-logs': '',
+  suppliers: '/pages/suppliers/index',
+  purchases: '/pages/purchases/index',
+  'inventory-logs': '/pages/inventory/index',
   more: '/pages/more/index'
 }
 
-const openTodayMenu = () => uni.showToast({ title: '功能开发中', icon: 'none' })
+const openTodayMenu = () => uni.navigateTo({ url: '/pages/purchases/order' })
 const goInventory = () => uni.navigateTo({ url: '/pages/inventory/index' })
-const goAddRevenue = () => uni.showToast({ title: '功能开发中', icon: 'none' })
+const goAddRevenue = () => uni.navigateTo({ url: '/pages/revenue/index' })
 const go = (page) => {
   const url = ROUTES[page]
   if (url) uni.navigateTo({ url })

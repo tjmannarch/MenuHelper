@@ -14,17 +14,20 @@
 				label="查看收入、成本与利润分析"
 				icon="chart"
 				is-link
-				@click="toast.info('功能开发中')"
+				@click="go('/pages/finance/index')"
+			/>
+			<wd-cell
+				title="新鲜度预警"
+				label="查看超过存放天数的食材"
+				icon="warn-bold"
+				is-link
+				@click="go('/pages/freshness/index')"
 			/>
 		</wd-cell-group>
 	</view>
 </template>
 
 <script setup>
-import { useToast } from 'wot-design-uni'
-
-const toast = useToast()
-
 function go(url) {
   uni.navigateTo({ url })
 }
